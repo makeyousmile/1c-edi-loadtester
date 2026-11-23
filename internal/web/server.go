@@ -160,10 +160,13 @@ func (s *Server) handlePreview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req struct {
-		GLN              string `json:"gln"`
-		Suffix           string `json:"suffix"`
-		UpdateTimestamps bool   `json:"updateTimestamps"`
-		Count            int    `json:"count"`
+		GLN                string `json:"gln"`
+		Suffix             string `json:"suffix"`
+		BaseMessageID      string `json:"baseMessageID"`
+		BaseDocumentID     string `json:"baseDocumentID"`
+		BaseDeliveryNoteID string `json:"baseDeliveryNoteID"`
+		UpdateTimestamps   bool   `json:"updateTimestamps"`
+		Count              int    `json:"count"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -171,10 +174,13 @@ func (s *Server) handlePreview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	gen, err := generator.NewGenerator(generator.Config{
-		TemplateXML:      s.templateXML,
-		GLN:              req.GLN,
-		Suffix:           req.Suffix,
-		UpdateTimestamps: req.UpdateTimestamps,
+		TemplateXML:        s.templateXML,
+		BaseMessageID:      req.BaseMessageID,
+		BaseDocumentID:     req.BaseDocumentID,
+		BaseDeliveryNoteID: req.BaseDeliveryNoteID,
+		GLN:                req.GLN,
+		Suffix:             req.Suffix,
+		UpdateTimestamps:   req.UpdateTimestamps,
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

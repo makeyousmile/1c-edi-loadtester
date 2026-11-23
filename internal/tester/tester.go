@@ -144,10 +144,13 @@ func (r *Runner) Start(cfg TestConfig) error {
 	r.mu.Unlock()
 
 	gen, err := generator.NewGenerator(generator.Config{
-		TemplateXML:      r.templateXML,
-		GLN:              cfg.GLN,
-		Suffix:           cfg.Suffix,
-		UpdateTimestamps: cfg.UpdateTimestamps,
+		TemplateXML:        r.templateXML,
+		BaseMessageID:      cfg.BaseMessageID,
+		BaseDocumentID:     cfg.BaseDocumentID,
+		BaseDeliveryNoteID: cfg.BaseDeliveryNoteID,
+		GLN:                cfg.GLN,
+		Suffix:             cfg.Suffix,
+		UpdateTimestamps:   cfg.UpdateTimestamps,
 	})
 	if err != nil {
 		r.Stop()

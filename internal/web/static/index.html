@@ -570,6 +570,28 @@
             </div>
           </div>
 
+          <!-- INITIAL / BASE UNIQUE FIELDS -->
+          <div style="margin-top: 12px; margin-bottom: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em; border-top: 1px solid var(--border-color); padding-top: 12px;">
+            Начальные (базовые) уникальные поля
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="baseMessageID">Базовый MessageID</label>
+              <input type="text" id="baseMessageID" value="00000000007712" oninput="syncDocID(this.value)">
+              <div class="helper-text">+ суффикс → 00000000007712001</div>
+            </div>
+            <div class="form-group">
+              <label for="baseDocumentID">Базовый DocumentID</label>
+              <input type="text" id="baseDocumentID" value="00000000007712" oninput="this.dataset.manual='true'">
+              <div class="helper-text">+ суффикс → 00000000007712001</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="baseDeliveryNoteID">Базовый DeliveryNoteID</label>
+            <input type="text" id="baseDeliveryNoteID" value="001-4810413900004-260616000002408">
+            <div class="helper-text">Номер накладной (+ суффикс инкремента)</div>
+          </div>
+
           <div class="form-row">
             <div class="form-group">
               <label for="delayMs">Задержка мс (0 = макс. RPS)</label>
@@ -901,6 +923,13 @@ function clearLogsTable() {
   `;
 }
 
+function syncDocID(val) {
+  const docInput = document.getElementById('baseDocumentID');
+  if (docInput.dataset.manual !== 'true') {
+    docInput.value = val;
+  }
+}
+
 async function startTest() {
   let endpoint = document.getElementById('endpointUrl').value.trim();
   const mockLat = document.getElementById('mockLatency').value;
@@ -920,6 +949,9 @@ async function startTest() {
     concurrency: parseInt(document.getElementById('concurrency').value, 10),
     gln: document.getElementById('gln').value.trim(),
     suffix: document.getElementById('suffix').value.trim(),
+    baseMessageID: document.getElementById('baseMessageID').value.trim(),
+    baseDocumentID: document.getElementById('baseDocumentID').value.trim(),
+    baseDeliveryNoteID: document.getElementById('baseDeliveryNoteID').value.trim(),
     delayMs: parseInt(document.getElementById('delayMs').value, 10) || 0,
     timeoutSec: parseInt(document.getElementById('timeoutSec').value, 10) || 30,
     updateTimestamps: document.getElementById('updateTimestamps').checked,
@@ -956,6 +988,9 @@ async function openPreview() {
   const payload = {
     gln: document.getElementById('gln').value.trim(),
     suffix: document.getElementById('suffix').value.trim(),
+    baseMessageID: document.getElementById('baseMessageID').value.trim(),
+    baseDocumentID: document.getElementById('baseDocumentID').value.trim(),
+    baseDeliveryNoteID: document.getElementById('baseDeliveryNoteID').value.trim(),
     updateTimestamps: document.getElementById('updateTimestamps').checked,
     count: 2
   };

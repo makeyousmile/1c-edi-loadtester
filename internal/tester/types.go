@@ -5,19 +5,22 @@ import (
 )
 
 type TestConfig struct {
-	EndpointURL      string            `json:"endpointUrl"`
-	Count            int               `json:"count"`
-	Concurrency      int               `json:"concurrency"`
-	GLN              string            `json:"gln"`
-	Suffix           string            `json:"suffix"`
-	DelayMs          int               `json:"delayMs"`
-	TimeoutSec       int               `json:"timeoutSec"`
-	UpdateTimestamps bool              `json:"updateTimestamps"`
-	AuthType         string            `json:"authType"` // "none", "basic", "bearer"
-	Username         string            `json:"username"`
-	Password         string            `json:"password"`
-	BearerToken      string            `json:"bearerToken"`
-	CustomHeaders    map[string]string `json:"customHeaders,omitempty"`
+	EndpointURL        string            `json:"endpointUrl"`
+	Count              int               `json:"count"`
+	Concurrency        int               `json:"concurrency"`
+	GLN                string            `json:"gln"`
+	Suffix             string            `json:"suffix"`
+	BaseMessageID      string            `json:"baseMessageID"`
+	BaseDocumentID     string            `json:"baseDocumentID"`
+	BaseDeliveryNoteID string            `json:"baseDeliveryNoteID"`
+	DelayMs            int               `json:"delayMs"`
+	TimeoutSec         int               `json:"timeoutSec"`
+	UpdateTimestamps   bool              `json:"updateTimestamps"`
+	AuthType           string            `json:"authType"` // "none", "basic", "bearer"
+	Username           string            `json:"username"`
+	Password           string            `json:"password"`
+	BearerToken        string            `json:"bearerToken"`
+	CustomHeaders      map[string]string `json:"customHeaders,omitempty"`
 }
 
 type ResponseLogItem struct {

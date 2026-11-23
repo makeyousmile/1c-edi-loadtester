@@ -77,4 +77,29 @@ func TestGenerator(t *testing.T) {
 	if doc1.DeliveryNoteID != "001-4819999999999-260616000002408002" {
 		t.Errorf("doc1 DeliveryNoteID = %s, want 001-4819999999999-260616000002408002", doc1.DeliveryNoteID)
 	}
+
+	// Test custom Base IDs
+	genCustom, err := NewGenerator(Config{
+		TemplateXML:        string(data),
+		BaseMessageID:      "CUSTOM_MSG_",
+		BaseDocumentID:     "CUSTOM_DOC_",
+		BaseDeliveryNoteID: "DN-BASE-",
+		Suffix:             "001",
+	})
+	if err != nil {
+		t.Fatalf("failed to create custom generator: %v", err)
+	}
+	docCustom, err := genCustom.Generate(0)
+	if err != nil {
+		t.Fatalf("generate custom error: %v", err)
+	}
+	if docCustom.MessageID != "CUSTOM_MSG_001" {
+		t.Errorf("docCustom MessageID = %s, want CUSTOM_MSG_001", docCustom.MessageID)
+	}
+	if docCustom.DocumentID != "CUSTOM_DOC_001" {
+		t.Errorf("docCustom DocumentID = %s, want CUSTOM_DOC_001", docCustom.DocumentID)
+	}
+	if docCustom.DeliveryNoteID != "DN-BASE-001" {
+		t.Errorf("docCustom DeliveryNoteID = %s, want DN-BASE-001", docCustom.DeliveryNoteID)
+	}
 }
