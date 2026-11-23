@@ -1,0 +1,16 @@
+# Binaries
+loadtester
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test artifacts
+*.test
+*.out
+*.log
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/

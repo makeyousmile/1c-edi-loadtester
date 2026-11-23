@@ -1,0 +1,125 @@
+<BLRWBL>
+   <MessageHeader>
+      <MessageID>00000000007712</MessageID>
+      <MsgDateTime>20260615135642</MsgDateTime>
+      <MessageType>BLRWBL</MessageType>
+      <MsgSenderID>4810413900004</MsgSenderID>
+      <MsgReceiverID>4819032530005</MsgReceiverID>
+      <FormType>0</FormType>
+   </MessageHeader>
+   <DeliveryNote>
+      <DeliveryNoteType>700</DeliveryNoteType>
+      <DocumentID>00000000007712</DocumentID>
+      <CreationDateTime>20260615135642</CreationDateTime>
+      <FunctionCode>9</FunctionCode>
+      <DeliveryNoteID>001-4810413900004-260616000002408</DeliveryNoteID>
+      <DeliveryNoteDate>20260616</DeliveryNoteDate>
+      <ContractName>Договор</ContractName>
+      <ContractID>1111100</ContractID>
+      <ContractDate>20211222</ContractDate>
+      <Document>
+         <DocumentName>Реестры документов, подтверждающих качество и безопасность товаров 01-10/516</DocumentName>
+      </Document>
+      <Shipper>
+         <GLN>4810413900004</GLN>
+         <Country>BY</Country>
+         <Name>Унитарное предприятие "Кока-Кола Бевриджиз Белоруссия"</Name>
+         <Address>Минская обл., Минский р-н,  д. Колядичи, 147/2.</Address>
+         <VATRegistrationNumber>100373962</VATRegistrationNumber>
+         <Contact>Начальник отдела сбыта Баландин А.Э.</Contact>
+      </Shipper>
+      <Receiver>
+         <GLN>4819032530005</GLN>
+         <Name>ИООО "РН-Запад"</Name>
+         <Address>223030, Минская обл., Минский р-н, д. Горани, тр. М6, 27-й км, 22 (АЗС).</Address>
+         <VATRegistrationNumber>690653143</VATRegistrationNumber>
+      </Receiver>
+      <FreightPayer>
+         <GLN>4810413900004</GLN>
+         <Name>Унитарное предприятие "Кока-Кола Бевриджиз Белоруссия"</Name>
+         <Address>Минская обл., Минский р-н,  д. Колядичи, 147/2.</Address>
+         <VATRegistrationNumber>100373962</VATRegistrationNumber>
+      </FreightPayer>
+      <ShipFrom>
+         <GLN>4810413900097</GLN>
+         <Address>Минская обл., Минский р-н, д. Колядичи, 147.</Address>
+         <Contact>Начальник отдела сбыта Баландин А.Э.</Contact>
+      </ShipFrom>
+      <ShipTo>
+         <GLN>4819032530111</GLN>
+         <Address>223030, Минская обл., Минский р-н, тр. М1/Е30, 365-й км, Лево, АЗС №11.</Address>
+      </ShipTo>
+      <Carrier>
+         <TransportContact>ТАРАСЕНКО В. С.</TransportContact>
+         <DeliveryContact>водитель ТАРАСЕНКО В. С.</DeliveryContact>
+         <TransportID>ВОЛЬВО,AO1017-5</TransportID>
+      </Carrier>
+      <Currency>BYN</Currency>
+      <DespatchAdviceLogisticUnitLineItem>
+         <LineItem>
+            <LineItemNumber>000010</LineItemNumber>
+            <LineItemSign>PROD</LineItemSign>
+            <LineItemID>4607174570276</LineItemID>
+            <LineItemName>Яблочный сок т.з. "Добрый", упаковка из комбинир. материалов 2лX6, РФ</LineItemName>
+            <GrossWeightValue>0.067500</GrossWeightValue>
+            <QuantityDespatched>30.000</QuantityDespatched>
+            <LineItemQuantityUOM>H87</LineItemQuantityUOM>
+            <DespatchUnitQuantityDespatched>5.000</DespatchUnitQuantityDespatched>
+            <CountryOfOrigin>RU</CountryOfOrigin>
+            <TaxRate>20</TaxRate>
+            <LineItemAmountWithoutCharges>182.00</LineItemAmountWithoutCharges>
+            <LineItemAmountCharges>36.40</LineItemAmountCharges>
+            <LineItemAmount>218.40</LineItemAmount>
+            <LineItemPrice>6.07</LineItemPrice>
+            <FieldCostControl>
+               <LineItemManufacturerOutputPrice>6.07</LineItemManufacturerOutputPrice>
+               <OutputPriceIncludingShippingCoast>ФСН</OutputPriceIncludingShippingCoast>
+               <CutRate>-</CutRate>
+               <AdditionalInformationPrice>ц4,40;фсн</AdditionalInformationPrice>
+            </FieldCostControl>
+            <SGBY01>
+               <CertificateType>DRCU</CertificateType>
+               <CertificateID>22334</CertificateID>
+            </SGBY01>
+            <LineItemIdentification>
+               <GroupPackingHeader>
+                  <UpperLevelCodeMark>MDEwNDYwNzE3NDU3MDMxMzIxNUcoU3BiO09yT0tXdTkzbDdJZQ</UpperLevelCodeMark>
+               </GroupPackingHeader>
+            </LineItemIdentification>
+            <LineItemIdentification>
+               <GroupPackingHeader>
+                  <UpperLevelCodeMark>MDEwNDYwNzE3NDU3MDMxMzIxNUcoU3BiO09yT0tXdTkzbDdJdg</UpperLevelCodeMark>
+               </GroupPackingHeader>
+            </LineItemIdentification>
+            <LineItemIdentification>
+               <GroupPackingHeader>
+                  <UpperLevelCodeMark>MDEwNDYwNzE3NDU3MDMxMzIxNUcoU3BiO09yT0tXdTkzbDdJdw</UpperLevelCodeMark>
+               </GroupPackingHeader>
+            </LineItemIdentification>
+            <LineItemIdentification>
+               <GroupPackingHeader>
+                  <UpperLevelCodeMark>MDIwNDYwNzE3NDU3MDI3NjI0MDAwODIyNjAzMTMyNTIxMzc2MjFXMDAwNzg1</UpperLevelCodeMark>
+               </GroupPackingHeader>
+            </LineItemIdentification>
+            <LineItemIdentification>
+               <GroupPackingHeader>
+                  <UpperLevelCodeMark>MDIwNDYwNzE3NDU3MDI3NjI0MDAwODIyNjAzMTMyNTIxMzc2MjFXMDAwNzg2</UpperLevelCodeMark>
+               </GroupPackingHeader>
+            </LineItemIdentification>
+            <LineItemExtraField>
+               <FieldName>Дополнительная информация к примечанию</FieldName>
+               <FieldValue>ДП - продукт детского питания, Н - напиток безалкогольный, РФ - Российская Федерация, MS - Magic Summer, У-Украина, МС-Моя семья, HK - нектар, П - вода питьевая, НС - напиток сокосодержащий, ДРвМБТ - Для реализации в магазинах беспошлинной торговли, ц - Отпускная цена, руб., сц - Скидка с отпускной цены, ос - Оптовая скидка, %, он - Оптовая надбавка, %, д - Расходы по доставке до покупателя за единицу товара, руб., ни - Надбавка импортера, %</FieldValue>
+            </LineItemExtraField>
+         </LineItem>
+      </DespatchAdviceLogisticUnitLineItem>
+      <Total>
+         <TotalAmountWithoutCharges>182.00</TotalAmountWithoutCharges>
+         <TotalAmountCharges>36.40</TotalAmountCharges>
+         <TotalAmount>218.40</TotalAmount>
+         <TotalLineItem>1</TotalLineItem>
+         <TotalLineItemQuantity>30.000</TotalLineItemQuantity>
+         <TotalGrossWeight>0.067500</TotalGrossWeight>
+         <TotalDespatchUnitQuantity>5.000</TotalDespatchUnitQuantity>
+      </Total>
+   </DeliveryNote>
+</BLRWBL>

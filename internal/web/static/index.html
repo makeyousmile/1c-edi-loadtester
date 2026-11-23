@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1C EDI BLRWBL Load Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-input: #0f172a;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-primary: #3b82f6;
+      --accent-primary-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border-radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      padding: 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-title h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-title p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .status-badge {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-idle { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
+    .status-running { background: rgba(16, 185, 129, 0.2); color: #34d399; animation: pulse 2s infinite; }
+    .status-stopped { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .quick-presets {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn-preset {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-preset:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border-color: #64748b;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-group input {
+      accent-color: var(--accent-primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .checkbox-group span {
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 11px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-primary-hover);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #dc2626;
+    }
+
+    .btn-secondary {
+      background: #334155;
+      color: white;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #475569;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Accordion */
+    details {
+      margin-top: 14px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+    }
+
+    details summary {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      user-select: none;
+      outline: none;
+    }
+
+    details summary:hover {
+      color: var(--text-main);
+    }
+
+    .details-content {
+      padding-top: 12px;
+    }
+
+    /* Metrics Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .metric-card {
+      background: #111827;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .metric-201 { color: var(--success); }
+    .metric-400 { color: var(--warning); }
+    .metric-err { color: var(--danger); }
+    .metric-rps { color: #38bdf8; }
+
+    /* Progress bar */
+    .progress-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-bg {
+      background: #0f172a;
+      border-radius: 9999px;
+      height: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      height: 100%;
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    /* Latency stats */
+    .latency-bar {
+      display: flex;
+      justify-content: space-between;
+      background: #111827;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 13px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .latency-item span {
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      margin-right: 4px;
+    }
+
+    /* Log Table */
+    .table-container {
+      max-height: 480px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: #0f172a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #1e293b;
+      position: sticky;
+      top: 0;
+      padding: 10px 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e293b;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .badge-code {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .badge-201 { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-400 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .badge-err { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+    .btn-view {
+      background: #334155;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .btn-view:hover {
+      background: #475569;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(3px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 900px;
+      max-width: 95vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    pre code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #e2e8f0;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .code-box {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 16px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .highlight-id {
+      color: #38bdf8;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-title">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+        1C EDI BLRWBL Load Tester
+      </h1>
+      <p>Генерация и нагрузочное тестирование отправки электронных накладных в 1С: /api/v1/edocuments</p>
+    </div>
+    <div>
+      <span id="statusBadge" class="status-badge status-idle">ГОТОВ К ЗАПУСКУ</span>
+    </div>
+  </header>
+
+  <div class="grid-layout">
+    <!-- LEFT PANEL: CONFIGURATION -->
+    <div>
+      <div class="card">
+        <div class="card-title">
+          <span>Параметры тестирования</span>
+        </div>
+
+        <form id="testForm" onsubmit="return false;">
+          <div class="form-group">
+            <label for="endpointUrl">Целевой эндпоинт 1С</label>
+            <input type="text" id="endpointUrl" value="/mock/1c/api/v1/edocuments" required>
+            <div class="quick-presets">
+              <button type="button" class="btn-preset" onclick="setEndpoint('/mock/1c/api/v1/edocuments')">Встроенный Mock 1C</button>
+              <button type="button" class="btn-preset" onclick="setEndpoint('http://localhost:8081/api/v1/edocuments')">1С EDI Local:8081</button>
+              <button type="button" class="btn-preset" onclick="setEndpoint('http://1c-server/EDI_exchange/api/v1/edocuments')">1С Prod EDI</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="count">Количество документов</label>
+              <input type="number" id="count" value="50" min="1" max="100000" required>
+            </div>
+            <div class="form-group">
+              <label for="concurrency">Потоки (Параллельность)</label>
+              <input type="number" id="concurrency" value="5" min="1" max="100" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gln">GLN отправителя</label>
+              <input type="text" id="gln" value="4810413900004" required>
+              <div class="helper-text">MsgSenderID, Shipper, FreightPayer, DeliveryNoteID</div>
+            </div>
+            <div class="form-group">
+              <label for="suffix">Суффикс инкремента</label>
+              <input type="text" id="suffix" value="001" required>
+              <div class="helper-text">00000000007712001, ...002</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="delayMs">Задержка мс (0 = макс. RPS)</label>
+              <input type="number" id="delayMs" value="0" min="0" max="10000">
+            </div>
+            <div class="form-group">
+              <label for="timeoutSec">Таймаут (сек)</label>
+              <input type="number" id="timeoutSec" value="30" min="1" max="300">
+            </div>
+          </div>
+
+          <label class="checkbox-group">
+            <input type="checkbox" id="updateTimestamps" checked>
+            <span>Обновлять дату и время (MsgDateTime/CreationDateTime)</span>
+          </label>
+
+          <!-- ADVANCED SETTINGS -->
+          <details>
+            <summary>⚙️ Расширенные настройки (Авторизация и Mock 1C)</summary>
+            <div class="details-content">
+              <div class="form-group">
+                <label for="authType">Тип авторизации</label>
+                <select id="authType" onchange="toggleAuthFields()">
+                  <option value="none">Без авторизации</option>
+                  <option value="basic">Basic Auth (логин/пароль)</option>
+                  <option value="bearer">Bearer Token</option>
+                </select>
+              </div>
+
+              <div id="basicAuthFields" style="display: none;" class="form-row">
+                <div class="form-group">
+                  <label for="authUser">Логин 1С</label>
+                  <input type="text" id="authUser" placeholder="EDI_User">
+                </div>
+                <div class="form-group">
+                  <label for="authPass">Пароль 1С</label>
+                  <input type="text" id="authPass" placeholder="******">
+                </div>
+              </div>
+
+              <div id="bearerAuthFields" style="display: none;" class="form-group">
+                <label for="authToken">Bearer Token</label>
+                <input type="text" id="authToken" placeholder="eyJhbGciOi...">
+              </div>
+
+              <div class="form-row" style="margin-top: 10px;">
+                <div class="form-group">
+                  <label for="mockLatency">Mock 1C задержка (мс)</label>
+                  <input type="number" id="mockLatency" value="10" min="0" max="5000">
+                </div>
+                <div class="form-group">
+                  <label for="mockErrorRate">Mock 1C % ошибок 400</label>
+                  <input type="number" id="mockErrorRate" value="0" min="0" max="100">
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- BUTTONS -->
+          <div class="btn-group">
+            <button type="button" id="btnStart" class="btn btn-primary" onclick="startTest()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              Запустить
+            </button>
+            <button type="button" id="btnStop" class="btn btn-danger" onclick="stopTest()" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+              Остановить
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="openPreview()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              XML
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: METRICS & LIVE LOG -->
+    <div>
+      <div class="card">
+        <div class="card-title">
+          <span>Результаты и метрики в реальном времени</span>
+          <span id="elapsedTime" style="font-size: 13px; font-weight: normal; color: var(--text-muted);">Время: 0.0 сек</span>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-wrapper">
+          <div class="progress-info">
+            <span>Прогресс выполнения</span>
+            <span id="progressText">0 / 0 (0%)</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progressBar" class="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- METRICS TILES -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Отправлено</div>
+            <div id="mTotal" class="metric-value">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">201 Created</div>
+            <div id="m201" class="metric-value metric-201">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">400 Bad Req</div>
+            <div id="m400" class="metric-value metric-400">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Ошибки / Сеть</div>
+            <div id="mErr" class="metric-value metric-err">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">RPS</div>
+            <div id="mRps" class="metric-value metric-rps">0.0</div>
+          </div>
+        </div>
+
+        <!-- LATENCY SUMMARY -->
+        <div class="latency-bar">
+          <div class="latency-item"><span>Мин:</span><strong id="lMin">0</strong> ms</div>
+          <div class="latency-item"><span>Среднее:</span><strong id="lAvg">0</strong> ms</div>
+          <div class="latency-item"><span>Макс:</span><strong id="lMax">0</strong> ms</div>
+          <div class="latency-item"><span>P95:</span><strong id="lP95">0</strong> ms</div>
+        </div>
+
+        <!-- LIVE LOG TABLE -->
+        <div class="card-title" style="margin-bottom: 8px;">
+          <span style="font-size: 14px;">Журнал запросов (последние 300)</span>
+          <button class="btn-preset" onclick="clearLogsTable()">Очистить таблицу</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 45px;">#</th>
+                <th style="width: 75px;">Время</th>
+                <th>DeliveryNoteID</th>
+                <th>MessageID</th>
+                <th style="width: 90px;">Статус</th>
+                <th style="width: 70px;">Время</th>
+                <th>Ответ 1С (Operation: 5)</th>
+                <th style="width: 70px;">Инфо</th>
+              </tr>
+            </thead>
+            <tbody id="logsBody">
+              <tr>
+                <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                  Ожидание запуска теста...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div id="previewModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Предпросмотр сгенерированного XML</h3>
+      <button class="modal-close" onclick="closeModal('previewModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+        Пример сформированных XML документов перед отправкой в 1С:
+      </p>
+      <div id="previewContent">Загрузка предпросмотра...</div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div id="detailModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="detailTitle">Детали запроса</h3>
+      <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="font-size: 13px; margin-bottom: 6px; color: var(--text-muted);">Тело ответа 1С (JSON):</h4>
+      <div class="code-box">
+        <pre><code id="detailResponseJson"></code></pre>
+      </div>
+
+      <h4 style="font-size: 13px; margin-bottom: 6px; color: var(--text-muted);">Отправленный XML &lt;BLRWBL&gt;:</h4>
+      <div class="code-box">
+        <pre><code id="detailRequestXml"></code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let eventSource = null;
+let currentLogs = [];
+
+function setEndpoint(url) {
+  document.getElementById('endpointUrl').value = url;
+}
+
+function toggleAuthFields() {
+  const type = document.getElementById('authType').value;
+  document.getElementById('basicAuthFields').style.display = (type === 'basic') ? 'flex' : 'none';
+  document.getElementById('bearerAuthFields').style.display = (type === 'bearer') ? 'block' : 'none';
+}
+
+function connectEvents() {
+  if (eventSource) {
+    eventSource.close();
+  }
+  eventSource = new EventSource('/api/test/events');
+  eventSource.onmessage = function(e) {
+    try {
+      const stats = JSON.parse(e.data);
+      updateUI(stats);
+    } catch(err) {
+      console.error("SSE parse error", err);
+    }
+  };
+  eventSource.onerror = function() {
+    // Reconnect automatically handled by browser EventSource
+  };
+}
+
+function updateUI(stats) {
+  const badge = document.getElementById('statusBadge');
+  const btnStart = document.getElementById('btnStart');
+  const btnStop = document.getElementById('btnStop');
+
+  if (stats.running) {
+    badge.textContent = 'ТЕСТИРОВАНИЕ ИДЕТ...';
+    badge.className = 'status-badge status-running';
+    btnStart.disabled = true;
+    btnStop.disabled = false;
+  } else {
+    btnStart.disabled = false;
+    btnStop.disabled = true;
+    if (stats.totalSent > 0) {
+      badge.textContent = 'ЗАВЕРШЕНО';
+      badge.className = 'status-badge status-idle';
+    } else {
+      badge.textContent = 'ГОТОВ К ЗАПУСКУ';
+      badge.className = 'status-badge status-idle';
+    }
+  }
+
+  // Counters
+  document.getElementById('mTotal').textContent = stats.totalSent || 0;
+  document.getElementById('m201').textContent = stats.success201 || 0;
+  document.getElementById('m400').textContent = stats.badRequest400 || 0;
+  document.getElementById('mErr').textContent = stats.otherErrors || 0;
+  document.getElementById('mRps').textContent = (stats.currentRps || 0).toFixed(1);
+
+  // Latencies
+  document.getElementById('lMin').textContent = stats.minLatencyMs || 0;
+  document.getElementById('lAvg').textContent = stats.avgLatencyMs || 0;
+  document.getElementById('lMax').textContent = stats.maxLatencyMs || 0;
+  document.getElementById('lP95').textContent = stats.p95LatencyMs || 0;
+
+  // Progress
+  const total = stats.totalPlanned || 0;
+  const sent = stats.totalSent || 0;
+  const pct = total > 0 ? Math.min(100, Math.round((sent / total) * 100)) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${sent} / ${total} (${pct}%)`;
+
+  const secs = ((stats.elapsedTimeMs || 0) / 1000).toFixed(1);
+  document.getElementById('elapsedTime').textContent = `Время: ${secs} сек`;
+
+  // Logs table
+  if (stats.recentLogs && stats.recentLogs.length > 0) {
+    currentLogs = stats.recentLogs;
+    renderLogs(stats.recentLogs);
+  }
+}
+
+function renderLogs(logs) {
+  const tbody = document.getElementById('logsBody');
+  tbody.innerHTML = '';
+  logs.forEach((item, index) => {
+    const tr = document.createElement('tr');
+    
+    let badgeClass = 'badge-code';
+    let statusText = item.statusCode;
+    if (item.statusCode === 201) {
+      badgeClass += ' badge-201';
+      statusText = '201 Created';
+    } else if (item.statusCode === 400) {
+      badgeClass += ' badge-400';
+      statusText = '400 Bad Req';
+    } else {
+      badgeClass += ' badge-err';
+      statusText = item.statusCode ? `${item.statusCode} Error` : 'Net Error';
+    }
+
+    const t = new Date(item.timestamp);
+    const timeStr = t.toTimeString().split(' ')[0] + '.' + String(t.getMilliseconds()).padStart(3, '0');
+
+    let opDesc = '';
+    if (item.operation > 0) {
+      opDesc = `<span style="color:#38bdf8;">Op ${item.operation}:</span> ${escapeHtml(item.statusDescription || '')}`;
+    } else if (item.error) {
+      opDesc = `<span style="color:#ef4444;">${escapeHtml(item.error)}</span>`;
+    }
+
+    tr.innerHTML = `
+      <td>${item.index}</td>
+      <td style="color:var(--text-muted);">${timeStr}</td>
+      <td title="${escapeHtml(item.deliveryNoteID)}">${escapeHtml(item.deliveryNoteID)}</td>
+      <td title="${escapeHtml(item.messageID)}">${escapeHtml(item.messageID)}</td>
+      <td><span class="${badgeClass}">${statusText}</span></td>
+      <td>${item.latencyMs} ms</td>
+      <td>${opDesc}</td>
+      <td><button class="btn-view" onclick="viewDetail(${index})">Инфо</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function clearLogsTable() {
+  document.getElementById('logsBody').innerHTML = `
+    <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">Журнал очищен</td></tr>
+  `;
+}
+
+async function startTest() {
+  let endpoint = document.getElementById('endpointUrl').value.trim();
+  const mockLat = document.getElementById('mockLatency').value;
+  const mockErr = document.getElementById('mockErrorRate').value;
+
+  // Append mock query params if endpoint is mock
+  if (endpoint.includes('/mock/1c/api/v1/edocuments')) {
+    const u = new URL(endpoint, window.location.origin);
+    u.searchParams.set('latency', mockLat);
+    u.searchParams.set('errorRate', mockErr);
+    endpoint = u.pathname + u.search;
+  }
+
+  const payload = {
+    endpointUrl: endpoint,
+    count: parseInt(document.getElementById('count').value, 10),
+    concurrency: parseInt(document.getElementById('concurrency').value, 10),
+    gln: document.getElementById('gln').value.trim(),
+    suffix: document.getElementById('suffix').value.trim(),
+    delayMs: parseInt(document.getElementById('delayMs').value, 10) || 0,
+    timeoutSec: parseInt(document.getElementById('timeoutSec').value, 10) || 30,
+    updateTimestamps: document.getElementById('updateTimestamps').checked,
+    authType: document.getElementById('authType').value,
+    username: document.getElementById('authUser').value,
+    password: document.getElementById('authPass').value,
+    bearerToken: document.getElementById('authToken').value
+  };
+
+  try {
+    const res = await fetch('/api/test/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      alert('Ошибка запуска: ' + errText);
+    }
+  } catch (err) {
+    alert('Ошибка сети: ' + err.message);
+  }
+}
+
+async function stopTest() {
+  try {
+    await fetch('/api/test/stop', { method: 'POST' });
+  } catch (err) {
+    console.error('Stop error', err);
+  }
+}
+
+async function openPreview() {
+  const payload = {
+    gln: document.getElementById('gln').value.trim(),
+    suffix: document.getElementById('suffix').value.trim(),
+    updateTimestamps: document.getElementById('updateTimestamps').checked,
+    count: 2
+  };
+
+  try {
+    const res = await fetch('/api/test/preview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      alert('Ошибка генерации предпросмотра');
+      return;
+    }
+    const docs = await res.json();
+    let html = '';
+    docs.forEach(doc => {
+      html += `
+        <div style="margin-bottom: 20px;">
+          <h4 style="color: #38bdf8; margin-bottom: 6px;">Документ #${doc.index + 1}</h4>
+          <div style="font-size: 13px; margin-bottom: 6px; font-family: monospace;">
+            <strong>MessageID:</strong> ${escapeHtml(doc.messageID)} | 
+            <strong>DocumentID:</strong> ${escapeHtml(doc.documentID)} | 
+            <strong>DeliveryNoteID:</strong> ${escapeHtml(doc.deliveryNoteID)}
+          </div>
+          <div class="code-box">
+            <pre><code>${escapeHtml(doc.xml)}</code></pre>
+          </div>
+        </div>
+      `;
+    });
+    document.getElementById('previewContent').innerHTML = html;
+    document.getElementById('previewModal').classList.add('active');
+  } catch(err) {
+    alert('Ошибка: ' + err.message);
+  }
+}
+
+function viewDetail(idx) {
+  const item = currentLogs[idx];
+  if (!item) return;
+
+  document.getElementById('detailTitle').textContent = `Запрос #${item.index} [DeliveryNoteID: ${item.deliveryNoteID}]`;
+  document.getElementById('detailRequestXml').textContent = item.requestXmlSnippet || '(нет данных)';
+  document.getElementById('detailResponseJson').textContent = item.responseBody || item.error || '(нет данных)';
+  document.getElementById('detailModal').classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  connectEvents();
+});
+</script>
+
+</body>
+</html>
